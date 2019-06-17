@@ -4,82 +4,105 @@ void main() {
   final emitterA = BlocEmitterA();
   final emitterB = BlocEmitterB();
 
-  final foo = BlocBar(bar);
-  final foo2 = BlocBar(bar);
-  final foo3 = BlocBaz(bar);
-  final foo4 = BlocBar(bar);
+  final subscriberA = BlocSubscriberA(emitterA);
+  final subscriberB = BlocSubscriberB(emitterA);
+  final subscriberC = BlocSubscriberC(emitterB);
+  final subscriberD = BlocSubscriberD(emitterA, emitterB);
 
-  bar.emitValue(5);
+  emitterA.emitValue(5);
+  emitterB.emitValue('abcd');
 }
 
 class BlocEmitterA extends Bloc {
   EventEmitter<int> emitter = EventEmitter();
 
-  void emitValue(int value) {
-    emitter.emit(value);
+  void emitValue(int data) {
+    print('EmitterA is broadcasting an event: $data');
+    emitter.emit(data);
   }
 }
 
 
 class BlocEmitterB extends Bloc {
-  EventEmitter<int> emitter = EventEmitter();
+  EventEmitter<String> emitter;
 
   BlocEmitterB() {
-    emitter.transform(transformer);
+    emitter = EventEmitter<String>();
   }
 
-  int transformer(int data) => data * 2;
+  String transformer(int data) => 's${data.toString()}';
 
-  void emitValue(int value) {
-    emitter.emit(value);
-  }
-}
-
-class BlocB extends Bloc {
-  EventSubscriber<int> subscriber;
-
-  BlocBar(BlocA bar) {
-    subscriber = EventSubscriber(onEvent);
-    subscriber.subscribeTo(bar.emitter);
-  }
-
-  void onEvent(int data) {
-    print(data);
+  void emitValue(String data) {
+    print('EmitterB is broadcasting an event: $data');
+    emitter.emit(data);
   }
 }
 
-class BlocC extends Bloc {
+class BlocSubscriberA extends Bloc {
   EventSubscriber<int> subscriber;
 
-  BlocBaz(BlocA bar) {
-    subscriber = EventSubscriber(
-        onEvent,
-        transformer: EventTransformer.fromHandler(transformer),
-    );
-    subscriber.subscribeTo(bar.emitter);
+  BlocSubscriberA(BlocEmitterA emitterA) {
+    subscriber = emitterA.emitter.createSubscription(onEvent: onEvent);
   }
 
   void onEvent(int data) {
-    print(data);
+    print('SubscriberA recieved event from EmitterA: $data');
   }
-
-  int transformer(int data) => data * 2;
 }
 
-class BlocD extends Bloc {
+class BlocSubscriberB extends Bloc {
+  EventSubscriber<String> subscriber;
+
+  BlocSubscriberB(BlocEmitterA emitterA) {
+    subscriber = emitterA.emitter
+                         .createSubscription()
+                         .transformWithHandler(transformer)
+                         ..listen(onEvent);
+  }
+
+  String transformer(int data) => 's${data.toString()}';
+
+  void onEvent(String data) {
+    print('SubscriberB recieved event from EmitterA: $data');
+  }
+}
+
+class BlocSubscriberC extends Bloc {
   EventSubscriber<int> subscriber;
 
-  BlocBaz(BlocA bar) {
-    subscriber = EventSubscriber(
-      onEvent,
-      transformer: EventTransformer.fromHandler(transformer),
-    );
-    subscriber.subscribeTo(bar.emitter);
+  BlocSubscriberC(BlocEmitterB emitterB) {
+    subscriber = emitterB.emitter.createSubscription()
+                                 .transformWithHandler(transformer)
+                                 ..listen(onEvent);
+  }
+
+  int transformer(String data) {
+    int total = 0;
+    for (var code in data.codeUnits) {
+      total += code;
+    }
+    return total;
   }
 
   void onEvent(int data) {
-    print(data);
+    print('SubscriberC recieved event from EmitterB: $data');
+  }
+}
+
+class BlocSubscriberD extends Bloc {
+  EventSubscriber<int> subscriberA;
+  EventSubscriber<String> subscriberB;
+
+  BlocSubscriberD(BlocEmitterA emitterA, BlocEmitterB emitterB) {
+    subscriberA = emitterA.emitter.createSubscription(onEvent: onEventA);
+    subscriberB = emitterB.emitter.createSubscription(onEvent: onEventB);
   }
 
-  int transformer(int data) => data * 2;
+  void onEventA(int data) {
+    print('SubscriberD recieved event from EmitterA: $data');
+  }
+
+  void onEventB(String data) {
+    print('SubscriberD recieved event from EmitterB: $data');
+  }
 }

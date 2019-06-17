@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:nbtb/src/event.dart';
+import 'package:nbtb/src/event_route_node.dart';
+import 'package:nbtb/src/event_route_node.dart';
 import 'package:nbtb/src/event_subscriber.dart';
 import 'package:nbtb/src/event_transformer.dart';
 import 'package:nbtb/src/typedefs.dart';
@@ -10,22 +12,27 @@ class EventEmitter<E> {
   final PublishSubject<E> subject;
   final bool closeOnError;
 
+  EventTransformer transformer;
+
   EventEmitter({this.closeOnError = false})
-    : subject = PublishSubject<E>();
+      : subject = PublishSubject<E>();
+
+  EventEmitter.withStream(Stream<E> stream, {this.closeOnError = false})
+      : subject = PublishSubject<E>() {
+    ArgumentError.checkNotNull(stream);
+    subject.addStream(stream);
+  }
 
   void emit(E event) {
     subject.add(event);
   }
 
-  createSubscription(EventSubscriber<E> subscriber, [IEventTransformer<E> transformer]) {
-    Observable<E> subj = subject;
-    if (transformer != null) {
-      subj = subj.transform(
-        StreamTransformer.fromHandlers(handleData: (data, sink) {
-          sink.add(transformer.transform(data));
-        }),
-      );
-    }
-    return subj.pipe(subscriber);
+  EventSubscriber<E> createSubscription({
+      OnStreamEvent<E> onEvent,
+      OnStreamError onError,
+      OnStreamDone onDone,
+    }) {
+    return EventSubscriber<E>(onEvent: onEvent, onError: onError, onDone: onDone)
+      ..subject.addStream(this.subject);
   }
 }

@@ -1,3 +1,3 @@
-typedef void OnStreamEvent<E>(E data);
-typedef void OnStreamError(Object error, StackTrace stackTrace);
-typedef void OnStreamDone();
+typedef OnStreamEvent<E> = void Function(E data);
+typedef OnStreamError = void Function(Object error, StackTrace stackTrace);
+typedef OnStreamDone = void Function();

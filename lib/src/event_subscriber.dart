@@ -1,40 +1,72 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:nbtb/src/event.dart';
 import 'package:nbtb/src/event_emitter.dart';
+import 'package:nbtb/src/event_route_node.dart';
 import 'package:nbtb/src/event_transformer.dart';
 import 'package:nbtb/src/typedefs.dart';
 import 'package:rxdart/rxdart.dart';
 
-class EventSubscriber<E> implements StreamConsumer<E> {
+class EventSubscriber<E> extends EventRouteNode<E> implements StreamConsumer<E> {
   final BehaviorSubject<E> subject;
-  final IEventTransformer<E> transformer;
 
-  OnStreamEvent<E> onEvent;
-  OnStreamError onError;
-  OnStreamDone onDone;
+  EventTransformer transformer;
 
-  EventSubscriber(
-    this.onEvent, {
-      this.transformer,
-      this.onError,
-      this.onDone,
-    }) : subject = BehaviorSubject<E>() {
-    subject.listen(onEvent, onError: onError, onDone: onDone);
+  EventSubscriber({
+    OnStreamEvent<E> onEvent,
+    OnStreamError onError,
+    OnStreamDone onDone,
+  }) : subject = BehaviorSubject<E>() {
+    assert (onEvent != null || (onError == null && onDone == null));
+    if (onEvent != null) {
+      listen(onEvent, onError: onError, onDone: onDone);
+    }
   }
 
   EventSubscriber.seeded(
-    E initialValue,
-    this.onEvent, {
-      this.transformer,
-      this.onError,
-      this.onDone,
-    }) : subject = BehaviorSubject<E>.seeded(initialValue) {
-    subject.listen(onEvent, onError: onError, onDone: onDone);
+    E initialValue, {
+      OnStreamEvent<E> onEvent,
+      OnStreamError onError,
+      OnStreamDone onDone,
+  }) : subject = BehaviorSubject<E>.seeded(initialValue) {
+    assert (onEvent != null || (onError == null && onDone == null));
+    if (onEvent != null) {
+      listen(onEvent, onError: onError, onDone: onDone);
+    }
   }
 
-  void subscribeTo(EventEmitter emitter) {
-    emitter.createSubscription(this, transformer);
+  EventSubscriber.withStream(
+    Stream stream, {
+      OnStreamEvent<E> onEvent,
+      OnStreamError onError,
+      OnStreamDone onDone,
+  }) : subject = BehaviorSubject<E>() {
+    assert (onEvent != null || (onError == null && onDone == null));
+    subject.addStream(stream);
+    if (onEvent != null) {
+      listen(onEvent, onError: onError, onDone: onDone);
+    }
+  }
+
+  @override
+  EventSubscriber<T> transform<T>(EventTransformer<E, T> transformer) {
+    transformer.source = this;
+    transformer.destination = EventSubscriber<T>.withStream(
+      this.subject.transform<T>(
+        StreamTransformer.fromHandlers(handleData: (data, sink) {
+          sink.add(transformer.transform(data));
+        }),
+      ),
+    );
+
+    this.transformer = transformer;
+    return transformer.destination;
+  }
+
+  @override
+  StreamSubscription<E> listen(onEvent, {onError, onDone}) {
+    return subject.listen(onEvent, onError: onError, onDone: onDone);
   }
 
   @override
