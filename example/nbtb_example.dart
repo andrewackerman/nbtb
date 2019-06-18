@@ -9,8 +9,14 @@ void main() {
   final subscriberC = BlocSubscriberC(emitterB);
   final subscriberD = BlocSubscriberD(emitterA, emitterB);
 
+  final ioBloc = IOBloc(emitterA.emitter);
+  final ioBlocListener = IOBlocListener(ioBloc.emitter);
+
   emitterA.emitValue(5);
-  emitterB.emitValue('abcd');
+  emitterB.emitValue('a');
+  emitterB.emitValue('b');
+  emitterB.emitValue('c');
+  emitterB.emitValue('d');
 }
 
 class BlocEmitterA extends Bloc {
@@ -56,7 +62,7 @@ class BlocSubscriberB extends Bloc {
   BlocSubscriberB(BlocEmitterA emitterA) {
     subscriber = emitterA.emitter
                          .createSubscription()
-                         .transformWithHandler(transformer)
+                         .map(transformer)
                          ..listen(onEvent);
   }
 
@@ -72,7 +78,7 @@ class BlocSubscriberC extends Bloc {
 
   BlocSubscriberC(BlocEmitterB emitterB) {
     subscriber = emitterB.emitter.createSubscription()
-                                 .transformWithHandler(transformer)
+                                 .map(transformer)
                                  ..listen(onEvent);
   }
 
@@ -95,7 +101,9 @@ class BlocSubscriberD extends Bloc {
 
   BlocSubscriberD(BlocEmitterA emitterA, BlocEmitterB emitterB) {
     subscriberA = emitterA.emitter.createSubscription(onEvent: onEventA);
-    subscriberB = emitterB.emitter.createSubscription(onEvent: onEventB);
+    subscriberB = emitterB.emitter.createSubscription()
+                                  .skip(2)
+                                  ..listen(onEventB);
   }
 
   void onEventA(int data) {
@@ -104,5 +112,28 @@ class BlocSubscriberD extends Bloc {
 
   void onEventB(String data) {
     print('SubscriberD recieved event from EmitterB: $data');
+  }
+}
+
+class IOBloc extends SingleIOBloc<int, String> {
+  IOBloc(EventEmitter<int> emitterA) {
+    subscriber.addEmitter(emitterA);
+  }
+
+  @override
+  void onInput(int data) {
+    print('IOBloc recieved an event: $data');
+    emit('IO' + data.toString());
+  }
+}
+
+class IOBlocListener extends SingleIOBloc<String, Null> {
+  IOBlocListener(EventEmitter<String> ioBloc) {
+    subscriber.addEmitter(ioBloc);
+  }
+
+  @override
+  void onInput(String data) {
+    print('IOBlocListener recieved an event: $data');
   }
 }

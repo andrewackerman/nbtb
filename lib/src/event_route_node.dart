@@ -11,6 +11,17 @@ abstract class EventRouteNode<E> {
   });
 
   EventRouteNode<T> transform<T>(EventTransformer<E, T> transformer);
-  EventRouteNode<T> transformWithHandler<T>(T Function(E event) handler)
-    => transform(EventTransformer.fromHandler(handler));
+
+  EventRouteNode<T> map<T>(T Function(E event) handler)
+    => transform(EventTransformer.map(handler));
+  EventRouteNode<E> skip(int count)
+    => transform(EventTransformer.skip(count));
+  EventRouteNode<E> skipWhile(bool Function(E data) condition)
+    => transform(EventTransformer.skipWhile(condition));
+  EventRouteNode<E> take(int count)
+    => transform(EventTransformer.take(count));
+  EventRouteNode<E> takeWhile(bool Function(E data) condition)
+    => transform(EventTransformer.takeWhile(condition));
+  EventRouteNode<E> where(bool Function(E data) condition)
+    => transform(EventTransformer.where(condition));
 }
