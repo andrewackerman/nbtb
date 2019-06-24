@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/nbtb.iml" filepath="$PROJECT_DIR$/nbtb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/nbtb.iml" filepath="$PROJECT_DIR$/.idea/nbtb.iml" />
     </modules>
   </component>
 </project>
