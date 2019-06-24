@@ -2,24 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9e05220f-9001-4ee1-b397-7077aac20212" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/nbtb/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/nbtb/analysis_options.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/nbtb/example/nbtb_example.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/nbtb/lib/nbtb.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/nbtb/lib/src/bloc.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/nbtb/lib/src/event.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/nbtb/lib/src/event_emitter.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/nbtb/lib/src/event_route_node.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/nbtb/lib/src/event_subscriber.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/nbtb/lib/src/event_transformer.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/nbtb/lib/src/typedefs.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/nbtb/nbtb.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/nbtb/pubspec.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/nbtb/test/nbtb_test.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/event_route_node.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/event_route_node.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/event_subscriber.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/event_subscriber.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -32,7 +16,43 @@
     <option name="isMigrated" value="true" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/src/event_emitter.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="e#0#20#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/src/event_route_node.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="34" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="34" />
+              <folding>
+                <element signature="e#0#20#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/src/event_subscriber.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+              <folding>
+                <element signature="e#0#20#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -52,10 +72,8 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/lib/src/typedefs.dart" />
         <option value="$PROJECT_DIR$/lib/src/event_transformer.dart" />
-        <option value="$PROJECT_DIR$/lib/src/event_route_node.dart" />
         <option value="$PROJECT_DIR$/pubspec.yaml" />
         <option value="$PROJECT_DIR$/test/nbtb_test.dart" />
-        <option value="$PROJECT_DIR$/lib/src/event_subscriber.dart" />
         <option value="$PROJECT_DIR$/lib/src/bloc.dart" />
         <option value="$PROJECT_DIR$/lib/src/event_emitter.dart" />
         <option value="$PROJECT_DIR$/example/nbtb_example.dart" />
@@ -66,6 +84,8 @@
         <option value="$PROJECT_DIR$/packages/nbtb/pubspec.yaml" />
         <option value="$PROJECT_DIR$/packages/nbtb/lib/src/event_emitter.dart" />
         <option value="$PROJECT_DIR$/packages/nbtb/lib/src/event_subscriber.dart" />
+        <option value="$PROJECT_DIR$/lib/src/event_route_node.dart" />
+        <option value="$PROJECT_DIR$/lib/src/event_subscriber.dart" />
       </list>
     </option>
   </component>
@@ -90,6 +110,17 @@
             <path>
               <item name="nbtb" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="nbtb" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+            <path>
+              <item name="nbtb" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="nbtb" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="lib" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="nbtb" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="nbtb" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="lib" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
           <select />
@@ -176,6 +207,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="1" width="2572" height="1445" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2563694" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -192,7 +224,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3292683" />
       <window_info anchor="bottom" id="Dart Analysis" order="7" weight="0.18902439" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.4199695" />
+      <window_info anchor="bottom" id="Terminal" order="8" visible="true" weight="0.4199695" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Flutter Performance" order="11" side_tool="true" />
@@ -232,6 +264,35 @@
     <entry file="file://$PROJECT_DIR$/packages/nbtb/pubspec.yaml" />
     <entry file="file://$PROJECT_DIR$/packages/nbtb/lib/src/event_emitter.dart" />
     <entry file="file://$PROJECT_DIR$/packages/nbtb/lib/src/event_subscriber.dart" />
+    <entry file="file://$PROJECT_DIR$/lib/src/event_emitter.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/event_route_node.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="34" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/event_subscriber.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
   </component>
   <component name="masterDetails">
     <states>
