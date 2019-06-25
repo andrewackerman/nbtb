@@ -1,26 +1,37 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:nbtb/nbtb.dart';
-import 'package:nbtb/src/event_subscriber.dart';
+import 'package:nothin_but_the_bloc/nothin_but_the_bloc.dart';
+import 'package:nothin_but_the_bloc/src/subscriber.dart';
 
+/// The base class for all BLoC structures.
 abstract class Bloc {
-  @mustCallSuper
   void dispose() => null;
 }
 
+/// A utility BLoC structure that comes pre-populated with a single
+/// [Subscriber] input stream and a single [Emitter] output stream of
+/// types `EInput` and `EOutput`, respectively. Disposal of the streams is also
+/// handled automatically.
 abstract class SingleIOBloc<EInput, EOutput> extends Bloc {
-  final EventSubscriber<EInput> subscriber;
-  final EventEmitter<EOutput> emitter;
+  final Subscriber<EInput> subscriber;
+  final Emitter<EOutput> emitter;
 
-  SingleIOBloc()
-    : subscriber = EventSubscriber<EInput>(),
-      emitter = EventEmitter<EOutput>() {
-    subscriber.listen(onInput);
+  SingleIOBloc() : this.withControllers();
+
+  SingleIOBloc.withControllers({
+    Subscriber<EInput> subscriber,
+    Emitter<EOutput> emitter,
+  }) : this.subscriber = subscriber ?? Subscriber<EInput>(),
+       this.emitter = emitter ?? Emitter<EOutput>() {
+    this.subscriber.listen(onInput);
   }
 
-  void onInput(EInput data);
+  /// Override this method to handle incoming events from [subscriber], the
+  /// input stream.
+  void onInput(EInput data) => null;
 
+  /// Call this method to publish events to [emitter], the output stream.
   void emit(EOutput data) {
     emitter.emit(data);
   }
@@ -30,6 +41,5 @@ abstract class SingleIOBloc<EInput, EOutput> extends Bloc {
   void dispose() {
     subscriber.close();
     emitter.close();
-    super.dispose();
   }
 }

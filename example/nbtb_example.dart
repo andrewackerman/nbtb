@@ -1,13 +1,15 @@
-import 'package:nbtb/nbtb.dart';
+import 'package:nothin_but_the_bloc/nothin_but_the_bloc.dart';
 
 void main() {
   final emitterA = BlocEmitterA();
+
   final emitterB = BlocEmitterB();
+  BlocRegistry.register(emitterB);
 
   final subscriberA = BlocSubscriberA(emitterA);
   final subscriberB = BlocSubscriberB(emitterA);
-  final subscriberC = BlocSubscriberC(emitterB);
-  final subscriberD = BlocSubscriberD(emitterA, emitterB);
+  final subscriberC = BlocSubscriberC();
+  final subscriberD = BlocSubscriberD(emitterA);
 
   final ioBloc = IOBloc(emitterA.emitter);
   final ioBlocListener = IOBlocListener(ioBloc.emitter);
@@ -20,20 +22,24 @@ void main() {
 }
 
 class BlocEmitterA extends Bloc {
-  EventEmitter<int> emitter = EventEmitter();
+  Emitter<int> emitter = Emitter();
 
   void emitValue(int data) {
     print('EmitterA is broadcasting an event: $data');
     emitter.emit(data);
   }
+
+  void dispose() {
+    emitter.close();
+  }
 }
 
 
 class BlocEmitterB extends Bloc {
-  EventEmitter<String> emitter;
+  Emitter<String> emitter;
 
   BlocEmitterB() {
-    emitter = EventEmitter<String>();
+    emitter = Emitter<String>();
   }
 
   String transformer(int data) => 's${data.toString()}';
@@ -42,13 +48,17 @@ class BlocEmitterB extends Bloc {
     print('EmitterB is broadcasting an event: $data');
     emitter.emit(data);
   }
+
+  void dispose() {
+    emitter.close();
+  }
 }
 
 class BlocSubscriberA extends Bloc {
-  EventSubscriber<int> subscriber;
+  Subscriber<int> subscriber;
 
   BlocSubscriberA(BlocEmitterA emitterA) {
-    subscriber = emitterA.emitter.createSubscription(onEvent: onEvent);
+    subscriber = emitterA.emitter.createSubscriber(onEvent: onEvent);
   }
 
   void onEvent(int data) {
@@ -57,11 +67,11 @@ class BlocSubscriberA extends Bloc {
 }
 
 class BlocSubscriberB extends Bloc {
-  EventSubscriber<String> subscriber;
+  Subscriber<String> subscriber;
 
   BlocSubscriberB(BlocEmitterA emitterA) {
     subscriber = emitterA.emitter
-                         .createSubscription()
+                         .createSubscriber()
                          .map(transformer)
                          ..listen(onEvent);
   }
@@ -71,13 +81,17 @@ class BlocSubscriberB extends Bloc {
   void onEvent(String data) {
     print('SubscriberB recieved event from EmitterA: $data');
   }
+
+  void dispose() {
+    subscriber.close();
+  }
 }
 
 class BlocSubscriberC extends Bloc {
-  EventSubscriber<int> subscriber;
+  Subscriber<int> subscriber;
 
-  BlocSubscriberC(BlocEmitterB emitterB) {
-    subscriber = emitterB.emitter.createSubscription()
+  BlocSubscriberC() {
+    subscriber = BlocRegistry.get<BlocEmitterB>().emitter.createSubscriber()
                                  .map(transformer)
                                  ..listen(onEvent);
   }
@@ -93,15 +107,19 @@ class BlocSubscriberC extends Bloc {
   void onEvent(int data) {
     print('SubscriberC recieved event from EmitterB: $data');
   }
+
+  void dispose() {
+    subscriber.close();
+  }
 }
 
 class BlocSubscriberD extends Bloc {
-  EventSubscriber<int> subscriberA;
-  EventSubscriber<String> subscriberB;
+  Subscriber<int> subscriberA;
+  Subscriber<String> subscriberB;
 
-  BlocSubscriberD(BlocEmitterA emitterA, BlocEmitterB emitterB) {
-    subscriberA = emitterA.emitter.createSubscription(onEvent: onEventA);
-    subscriberB = emitterB.emitter.createSubscription()
+  BlocSubscriberD(BlocEmitterA emitterA) {
+    subscriberA = emitterA.emitter.createSubscriber(onEvent: onEventA);
+    subscriberB = BlocRegistry.get<BlocEmitterB>().emitter.createSubscriber()
                                   .skip(2)
                                   ..listen(onEventB);
   }
@@ -113,10 +131,15 @@ class BlocSubscriberD extends Bloc {
   void onEventB(String data) {
     print('SubscriberD recieved event from EmitterB: $data');
   }
+
+  void dispose() {
+    subscriberA.close();
+    subscriberB.close();
+  }
 }
 
 class IOBloc extends SingleIOBloc<int, String> {
-  IOBloc(EventEmitter<int> emitterA) {
+  IOBloc(Emitter<int> emitterA) {
     subscriber.addEmitter(emitterA);
   }
 
@@ -128,7 +151,7 @@ class IOBloc extends SingleIOBloc<int, String> {
 }
 
 class IOBlocListener extends SingleIOBloc<String, Null> {
-  IOBlocListener(EventEmitter<String> ioBloc) {
+  IOBlocListener(Emitter<String> ioBloc) {
     subscriber.addEmitter(ioBloc);
   }
 

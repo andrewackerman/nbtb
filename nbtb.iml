@@ -6,9 +6,9 @@
       <excludeFolder url="file://$MODULE_DIR$/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
-      <excludeFolder url="file://$MODULE_DIR$/packages/nbtb/.dart_tool" />
-      <excludeFolder url="file://$MODULE_DIR$/packages/nbtb/.pub" />
-      <excludeFolder url="file://$MODULE_DIR$/packages/nbtb/build" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/nothin_but_the_bloc/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/nothin_but_the_bloc/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/nothin_but_the_bloc/build" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Dart SDK" level="project" />
