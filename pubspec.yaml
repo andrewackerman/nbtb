@@ -1,5 +1,5 @@
 name: nothin_but_the_bloc
-description: A starting point for Dart libraries or applications.
+description: A library that aims to make BLoC principles more intuitive to implement.
 version: 0.0.1
 homepage: https://github.com/andrewackerman/nbnt
 repository: https://github.com/andrewackerman/nbnt

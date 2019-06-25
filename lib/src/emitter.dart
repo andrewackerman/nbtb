@@ -5,7 +5,7 @@ import 'package:nothin_but_the_bloc/src/typedefs.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// A [PublishSubject]-based class that is designed to be an output stream.
-/// Emitters can be registered by [Subscribers] to listen to their updates.
+/// Emitters can be registered by [Subscriber] streams to listen to their updates.
 class Emitter<E> extends Subject<E> {
   Emitter._(StreamController<E> controller, Observable<E> observable)
       : super(controller, observable);
@@ -52,7 +52,7 @@ class Emitter<E> extends Subject<E> {
     addError(error, st);
   }
 
-  /// Creates a [Subscription] object of this emitter's type that is preconfigured
+  /// Creates a [Subscriber] object of this emitter's type that is preconfigured
   /// to listen to this emitter's events.
   ///
   /// The `onEvent` callback will trigger whenever this emitter emits an event.

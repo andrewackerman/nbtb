@@ -49,4 +49,7 @@ void main() {
 
 For a more extended example, see the [example project](https://github.com/andrewackerman/nbnt/blob/master/example/nbtb_example.dart).
 
-_TODO: Make more comprehensive documentation_
+## TODO
+ 
+- Make more comprehensive documentation
+- Override `StreamController` and `Subject` inherited methods in `Emitter` and `Subscriber` to return an `Emitter`/`Subscriber` (so they can be properly chained)
