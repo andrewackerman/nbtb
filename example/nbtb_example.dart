@@ -19,6 +19,16 @@ void main() {
   emitterB.emitValue('b');
   emitterB.emitValue('c');
   emitterB.emitValue('d');
+
+  subscriberA.dispose();
+  subscriberB.dispose();
+  subscriberC.dispose();
+  subscriberD.dispose();
+  ioBlocListener.dispose();
+
+  emitterA.dispose();
+  emitterB.dispose();
+  ioBloc.dispose();
 }
 
 class BlocEmitterA extends Bloc {
@@ -33,7 +43,6 @@ class BlocEmitterA extends Bloc {
     emitter.close();
   }
 }
-
 
 class BlocEmitterB extends Bloc {
   Emitter<String> emitter;
@@ -70,10 +79,8 @@ class BlocSubscriberB extends Bloc {
   Subscriber<String> subscriber;
 
   BlocSubscriberB(BlocEmitterA emitterA) {
-    subscriber = emitterA.emitter
-                         .createSubscriber()
-                         .map(transformer)
-                         ..listen(onEvent);
+    subscriber = emitterA.emitter.createSubscriber().map(transformer)
+      ..listen(onEvent);
   }
 
   String transformer(int data) => 's${data.toString()}';
@@ -91,9 +98,11 @@ class BlocSubscriberC extends Bloc {
   Subscriber<int> subscriber;
 
   BlocSubscriberC() {
-    subscriber = BlocRegistry.get<BlocEmitterB>().emitter.createSubscriber()
-                                 .map(transformer)
-                                 ..listen(onEvent);
+    subscriber = BlocRegistry.get<BlocEmitterB>()
+        .emitter
+        .createSubscriber()
+        .map(transformer)
+          ..listen(onEvent);
   }
 
   int transformer(String data) {
@@ -119,9 +128,11 @@ class BlocSubscriberD extends Bloc {
 
   BlocSubscriberD(BlocEmitterA emitterA) {
     subscriberA = emitterA.emitter.createSubscriber(onEvent: onEventA);
-    subscriberB = BlocRegistry.get<BlocEmitterB>().emitter.createSubscriber()
-                                  .skip(2)
-                                  ..listen(onEventB);
+    subscriberB = BlocRegistry.get<BlocEmitterB>()
+        .emitter
+        .createSubscriber()
+        .skip(2)
+          ..listen(onEventB);
   }
 
   void onEventA(int data) {

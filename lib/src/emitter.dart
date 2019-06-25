@@ -8,7 +8,7 @@ import 'package:rxdart/rxdart.dart';
 /// Emitters can be registered by [Subscribers] to listen to their updates.
 class Emitter<E> extends Subject<E> {
   Emitter._(StreamController<E> controller, Observable<E> observable)
-    : super(controller, observable);
+      : super(controller, observable);
 
   /// Creates an [Emitter] with an empty item queue.
   ///

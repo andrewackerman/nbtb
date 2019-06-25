@@ -13,8 +13,9 @@ class BlocRegistry {
   ///
   /// The returned `bool` represents if a bloc was registered under the
   /// specified type before this method was called.
-  static bool register<T extends Bloc>(T bloc, {bool replaceIfExists = false})
-    => _inst._register(bloc, replaceIfExists: replaceIfExists);
+  static bool register<T extends Bloc>(T bloc,
+          {bool replaceIfExists = false}) =>
+      _inst._register(bloc, replaceIfExists: replaceIfExists);
 
   bool _register<T extends Bloc>(T bloc, {bool replaceIfExists = false}) {
     final exists = _blocs.containsKey(T);

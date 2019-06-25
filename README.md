@@ -47,4 +47,6 @@ void main() {
 }
 ```
 
-TODO: Make more comprehensive documentation
+For a more extended example, see the [example project](https://github.com/andrewackerman/nbnt/blob/master/example/nbtb_example.dart).
+
+_TODO: Make more comprehensive documentation_

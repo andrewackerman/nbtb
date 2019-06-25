@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:meta/meta.dart';
 import 'package:nothin_but_the_bloc/nothin_but_the_bloc.dart';
 import 'package:nothin_but_the_bloc/src/subscriber.dart';
@@ -22,8 +20,8 @@ abstract class SingleIOBloc<EInput, EOutput> extends Bloc {
   SingleIOBloc.withControllers({
     Subscriber<EInput> subscriber,
     Emitter<EOutput> emitter,
-  }) : this.subscriber = subscriber ?? Subscriber<EInput>(),
-       this.emitter = emitter ?? Emitter<EOutput>() {
+  })  : this.subscriber = subscriber ?? Subscriber<EInput>(),
+        this.emitter = emitter ?? Emitter<EOutput>() {
     this.subscriber.listen(onInput);
   }
 
