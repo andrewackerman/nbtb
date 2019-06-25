@@ -36,8 +36,8 @@ abstract class SingleIOBloc<EInput, EOutput> extends Bloc {
 
   @override
   @mustCallSuper
-  void dispose() {
-    subscriber.close();
-    emitter.close();
+  void dispose() async {
+    await emitter.close();
+    await subscriber.close();
   }
 }

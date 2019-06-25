@@ -65,7 +65,12 @@ class Emitter<E> extends Subject<E> {
     OnStreamError onError,
     OnStreamDone onDone,
   }) {
-    return Subscriber<E>(onEvent: onEvent, onError: onError, onDone: onDone)
-      ..addStream(this.controller.stream);
+    final subscriber = Subscriber<E>(
+      onEvent: onEvent,
+      onError: onError,
+      onDone: onDone,
+    );
+    this.controller.stream.pipe(subscriber);
+    return subscriber;
   }
 }

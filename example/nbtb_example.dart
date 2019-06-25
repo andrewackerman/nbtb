@@ -1,6 +1,6 @@
 import 'package:nothin_but_the_bloc/nothin_but_the_bloc.dart';
 
-void main() {
+void main() async {
   final emitterA = BlocEmitterA();
 
   final emitterB = BlocEmitterB();
@@ -14,11 +14,15 @@ void main() {
   final ioBloc = IOBloc(emitterA.emitter);
   final ioBlocListener = IOBlocListener(ioBloc.emitter);
 
-  emitterA.emitValue(5);
-  emitterB.emitValue('a');
-  emitterB.emitValue('b');
-  emitterB.emitValue('c');
-  emitterB.emitValue('d');
+  await emitterA.emitValue(5);
+  await emitterB.emitValue('a');
+  await emitterB.emitValue('b');
+  await emitterB.emitValue('c');
+  await emitterB.emitValue('d');
+
+  emitterA.dispose();
+  emitterB.dispose();
+  ioBloc.dispose();
 
   subscriberA.dispose();
   subscriberB.dispose();
@@ -26,9 +30,6 @@ void main() {
   subscriberD.dispose();
   ioBlocListener.dispose();
 
-  emitterA.dispose();
-  emitterB.dispose();
-  ioBloc.dispose();
 }
 
 class BlocEmitterA extends Bloc {

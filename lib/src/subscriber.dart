@@ -15,14 +15,6 @@ class Subscriber<E> extends Subject<E> implements ValueObservable<E> {
     this._wrapper,
   ) : super(controller, observable);
 
-  factory Subscriber._fromStream(Stream<E> stream) {
-    final controller = StreamController<E>.broadcast();
-    controller.addStream(stream);
-
-    final wrapper = _Wrapper<E>();
-    return Subscriber._(controller, Observable<E>(controller.stream), wrapper);
-  }
-
   /// Creates a [Subscriber] with an empty item queue.
   ///
   /// The `onEvent` callback will be triggered when the subscriber receives an event.
@@ -105,6 +97,12 @@ class Subscriber<E> extends Subject<E> implements ValueObservable<E> {
   }
 
   @override
+  close() async {
+    await controller.stream.drain();
+    await super.close();
+  }
+
+  @override
   void onAdd(E event) => _wrapper.setValue(event);
 
   @override
@@ -122,30 +120,22 @@ class Subscriber<E> extends Subject<E> implements ValueObservable<E> {
   @override
   E get value => _wrapper.latestValue;
 
-  /// Set and emit the new value.
-//  set value(E newValue) => add(newValue);
-
-  /// Utility method for listening to multiple streams at once.
-  void addStreams(Iterable<Stream<E>> streams) async {
-    for (var stream in streams) {
-      await addStream(stream);
-    }
-  }
-
   /// Registers an emitter with this subscriber, listening to its events.
   void addEmitter(Emitter<E> emitter) async =>
-      await addStream(emitter.controller.stream);
+      await emitter.controller.stream.pipe(this);
 
   /// Utility method for listening to multiple emitters at once.
   void addEmitters(Iterable<Emitter<E>> emitters) async {
     for (var emitter in emitters) {
-      await addStream(emitter.controller.stream);
+      await emitter.controller.stream.pipe(this);
     }
   }
 
   @override
   Subscriber<T> transform<T>(StreamTransformer<E, T> streamTransformer) {
-    return Subscriber<T>._fromStream(streamTransformer.bind(controller.stream));
+    final subscriber = Subscriber<T>();
+    streamTransformer.bind(controller.stream).pipe(subscriber);
+    return subscriber;
   }
 
   /// Utility method for transforming this stream with a handler that returns a
@@ -153,10 +143,9 @@ class Subscriber<E> extends Subject<E> implements ValueObservable<E> {
   /// transformed [Observable] for events.
   Subscriber<T> transformWithHandler<T>(
       Observable<T> Function(Observable<E> source) transformer) {
-    return Subscriber<T>()
-      ..addStream(
-        transformer(Observable<E>(controller.stream)),
-      );
+    final subscriber = Subscriber<T>();
+    transformer(Observable<E>(controller.stream)).pipe(subscriber);
+    return subscriber;
   }
 
   /// Creates an Observable where each item is a List containing the items from the source sequence. (See [Observable.buffer] for more details.)
