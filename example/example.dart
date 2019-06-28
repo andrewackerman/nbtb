@@ -29,7 +29,6 @@ void main() async {
   subscriberC.dispose();
   subscriberD.dispose();
   ioBlocListener.dispose();
-
 }
 
 class BlocEmitterA extends Bloc {
@@ -152,7 +151,7 @@ class BlocSubscriberD extends Bloc {
 
 class IOBloc extends SingleIOBloc<int, String> {
   IOBloc(Emitter<int> emitterA) {
-    subscriber.addEmitter(emitterA);
+    subscriber.listenToEmitter(emitterA);
   }
 
   @override
@@ -164,7 +163,7 @@ class IOBloc extends SingleIOBloc<int, String> {
 
 class IOBlocListener extends SingleIOBloc<String, Null> {
   IOBlocListener(Emitter<String> ioBloc) {
-    subscriber.addEmitter(ioBloc);
+    subscriber.listenToEmitter(ioBloc);
   }
 
   @override

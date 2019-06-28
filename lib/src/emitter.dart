@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:nothin_but_the_bloc/src/bloc_subject.dart';
 import 'package:nothin_but_the_bloc/src/subscriber.dart';
 import 'package:nothin_but_the_bloc/src/typedefs.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// A [PublishSubject]-based class that is designed to be an output stream.
 /// Emitters can be registered by [Subscriber] streams to listen to their updates.
-class Emitter<E> extends Subject<E> {
+class Emitter<E> extends BlocSubject<E> {
   Emitter._(StreamController<E> controller, Observable<E> observable)
       : super(controller, observable);
 
@@ -65,12 +66,12 @@ class Emitter<E> extends Subject<E> {
     OnStreamError onError,
     OnStreamDone onDone,
   }) {
-    final subscriber = Subscriber<E>(
-      onEvent: onEvent,
+    final subscriber = Subscriber<E>.fromStream(controller.stream);
+    subscriber.listen(
+      onEvent,
       onError: onError,
       onDone: onDone,
     );
-    this.controller.stream.pipe(subscriber);
     return subscriber;
   }
 }
